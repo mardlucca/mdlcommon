@@ -26,12 +26,31 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_CONCURRENT_EXCEPTION
+#define _MDL_CONCURRENT_EXCEPTION
+
+#include <stdexcept>
+
+namespace mdl {
+namespace concurrent {
+
+  class interrupted_exception : public std::runtime_error {
+    public:
+      interrupted_exception(const interrupted_exception& other);
+      interrupted_exception(const char* message);
+      interrupted_exception(const std::string& message);
+  };
+
+  class execution_exception : public std::runtime_error {
+    public:
+      execution_exception(const execution_exception& other);
+      execution_exception(const char* message, int errorCode);
+      execution_exception(const std::string& message, int errorCode);
+      int what_code() const noexcept;
+    private:
+      int errorCode;
+  };
+} // concurrent
+} // mdl
+
+#endif // _MDL_CONCURRENT_EXCEPTION

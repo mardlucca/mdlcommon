@@ -26,12 +26,45 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_TEXT_CSVPARSE
+#define _MDL_TEXT_CSVPARSE
+
+#include <istream>
+#include <string>
+
+namespace mdl {
+namespace text {
+
+  class ICsvParseListener {
+    public:
+      virtual void OnNewLine() = 0;
+      virtual void OnValue(const std::wstring& val) = 0;
+      virtual void OnTerminate();
+  };
+  
+  class StdOutCsvParseListener : public ICsvParseListener {
+    public:
+      StdOutCsvParseListener(
+        wchar_t quoteChar = L'"', wchar_t delimiterChar = L',');
+      void OnNewLine() override;
+      void OnValue(const std::wstring& val) override;
+
+      static ICsvParseListener& GetInstance();
+    private:
+      int count;
+      wchar_t quoteChar;
+      wchar_t delimiterChar;
+
+      static StdOutCsvParseListener _instance;
+  };
+
+  void CsvParse(std::wistream& in, ICsvParseListener& listener,
+      wchar_t quoteChar = L'"', wchar_t separatorChr = L',');
+  void CsvParse(const char* fileName, ICsvParseListener& listener,
+      wchar_t quoteChar = L'"', wchar_t separatorChr = L',');
+
+} // namespace text
+} // namespace mdl
+
+
+#endif // _MDL_TEXT_CSVPARSE

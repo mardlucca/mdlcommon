@@ -26,12 +26,62 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#include "../../h/concurrent/semaphore.h"
+
+namespace mdl {
+namespace concurrent {
+
+  Semaphore::Semaphore(long tickets) : tickets(tickets) {}
+
+  void Semaphore::Up() {
+    sync.Synchronized<void>([this]() {
+      tickets++;
+      sync.Notify();
+    });
   }
-}
+
+  template<>
+  void Semaphore::Up<void>(std::function<void (long)> doBeforeFn) {
+    return sync.Synchronized<void>([this, &doBeforeFn]() {
+      doBeforeFn(tickets);
+      tickets++;
+      sync.Notify();
+    });
+  }
+
+  void Semaphore::Down() {
+    sync.Synchronized<void>([this]() {
+      tickets--;
+      if (tickets < 0) {
+        sync.Wait();
+      }
+    });
+  }
+
+  template<>
+  void Semaphore::Down<void> (std::function<void (long)> doAfterFn) {
+     sync.Synchronized<void>([this, &doAfterFn]() {
+      tickets--;
+      if (tickets < 0) {
+        sync.Wait();
+      }
+      doAfterFn(tickets);
+    });
+  }
+
+  long Semaphore::NumTickets() const {
+    return tickets.load();
+  }
+
+  void Semaphore::InterruptAll() {
+    sync.Synchronized<void>([this]() {
+      // all interrupted threads will be awaken, and they will not require a ticket anymore. For 
+      //  that reason, we set the number of tickets back to zero.
+      if (tickets.load() < 0) { tickets.store(0); }
+      
+      sync.Interrupt();
+    });
+  }
+
+} // concurrent
+} // mdl

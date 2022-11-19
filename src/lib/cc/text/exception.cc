@@ -26,12 +26,17 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#include "../../h/text/exception.h"
+
+namespace mdl {
+namespace text {
+
+  parse_exception::parse_exception(const parse_exception& other) 
+      : std::runtime_error(other) {}
+  parse_exception::parse_exception(const char* message)
+      : std::runtime_error(message) {}
+  parse_exception::parse_exception(const std::string& message)
+      : std::runtime_error(message) {}
+
+} // text
+} // mdl

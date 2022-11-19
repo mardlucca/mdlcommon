@@ -26,12 +26,11 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_UTIL
+#define _MDL_UTIL
+
+#include "src/lib/h/util/exception.h"
+#include "src/lib/h/util/string.h"
+#include "src/lib/h/util/time.h"
+
+#endif // _MDL_UTIL

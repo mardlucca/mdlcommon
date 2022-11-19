@@ -26,12 +26,11 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_TEXT
+#define _MDL_TEXT
+
+#include "src/lib/h/text/csvparse.h"
+#include "src/lib/h/text/exception.h"
+#include "src/lib/h/text/numparse.h"
+
+#endif // _MDL_TEXT

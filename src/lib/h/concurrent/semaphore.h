@@ -26,12 +26,71 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#ifndef _MDL_CONCURRENT_SEMAPHORE
+#define _MDL_CONCURRENT_SEMAPHORE
+
+#include <atomic>
+
+#include "synchronizable.h"
+
+namespace mdl {
+namespace concurrent {
+
+  class Semaphore {
+    public:
+      Semaphore(long tickets = 0);
+      Semaphore(const Semaphore& tickets) = delete;
+      Semaphore(Semaphore&& other) = delete;
+
+      Semaphore& operator=(const Semaphore&) = delete;
+      Semaphore& operator=(Semaphore&& other) = delete;
+
+      void Up();
+
+      template<class T>
+      T Up(std::function<T (long)> doBeforeFn);
+      
+      void Down();
+
+      template<class T>
+      T Down(std::function<T (long)> doAfterFn);
+
+      long NumTickets() const;
+      
+      void InterruptAll();
+    private:
+      std::atomic_long tickets;
+      Synchronizable sync;
+  };
+
+  template<class T>
+  T Semaphore::Up(std::function<T (long)> doBeforeFn) {
+    return sync.Synchronized<T>([this, &doBeforeFn]() {
+      T val = doBeforeFn(tickets);
+      tickets++;
+      sync.Notify();
+      return val;
+    });
   }
-}
+
+  template<>
+  void Semaphore::Up<void>(std::function<void (long)> doBeforeFn);
+
+  template<class T>
+  T Semaphore::Down(std::function<T (long)> doAfterFn) {
+    return sync.Synchronized<T>([this, &doAfterFn]() {
+      tickets--;
+      if (tickets < 0) {
+        sync.Wait();
+      }
+      return doAfterFn(tickets);
+    });
+  }
+
+  template<>
+  void Semaphore::Down<void>(std::function<void (long)> doAfterFn);
+
+} // concurrent
+} // mdl
+
+#endif // _MDL_CONCURRENT_THREAD_LOCAL

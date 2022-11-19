@@ -26,12 +26,30 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#include "../../h/concurrent/thread.h"
+
+#include <stdexcept>
+#include <sstream>
+
+#include  "../../h/concurrent/exception.h"
+
+namespace mdl {
+namespace concurrent {
+  namespace this_thread {
+    thread_local std::string name;
+
+    const std::string& get_name() { return name; }
+
+    std::thread::id get_id() noexcept { return std::this_thread::get_id(); }
   }
-}
+
+  ThreadFactory::ThreadFactory(const std::string& name) : name(name), idSeq(0) {}
+
+  std::string ThreadFactory::NextName() {
+    std::ostringstream out;
+    out << name << '-' << ++idSeq;
+    return out.str();
+  }
+
+} // concurrent
+} // mdl

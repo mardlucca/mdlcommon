@@ -26,16 +26,21 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MDL_EXAMPLE
-#define _MDL_EXAMPLE
+#ifndef _MDL_UTIL_TIME
+#define _MDL_UTIL_TIME
+
+#include <chrono>
 
 namespace mdl {
-namespace example {
+namespace util {
 
-  int TimesTwo(int num);
+  typedef std::chrono::time_point<std::chrono::steady_clock> instant;
 
-} // example
+  long GetTimeMillis();
+  instant Now();
+  long EllapsedTime(const instant& start, const instant& end);
+
+} // util
 } // mdl
 
-
-#endif  // _MDL_PROFILER
+#endif // _MDL_UTIL_TIME

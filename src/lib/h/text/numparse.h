@@ -26,11 +26,22 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <example.h>
+#ifndef _MDL_TEXT_NUMPARSE
+#define _MDL_TEXT_NUMPARSE
 
-#include <iostream>
+#include <string>
 
-int main() {
-  std::cout << "Example: " << mdl::example::TimesTwo(10) << std::endl;
-  return 0;
-}
+#include "exception.h"
+
+namespace mdl {
+namespace text {
+
+  double ParseDouble(const std::string& val);
+  double ParseDouble(const std::wstring& val);
+  int ParseInt(const std::string& val);
+  int ParseInt(const std::wstring& val);
+
+} // text
+} // mdl
+
+#endif // _MDL_TEXT_NUMPARSE

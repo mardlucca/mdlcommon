@@ -26,18 +26,27 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <gtest/gtest.h>
-
-#include <example.h>
+#include "../../h/concurrent/exception.h"
 
 namespace mdl {
-namespace example {
-namespace example_test {
+namespace concurrent {
 
-  TEST(ExampleTestSuite, TestTimesTwo) {
-    ASSERT_EQ(20, TimesTwo(10));
+  interrupted_exception::interrupted_exception(const interrupted_exception& other) 
+      : std::runtime_error(other) {}
+  interrupted_exception::interrupted_exception(const char* message)
+      : std::runtime_error(message) {}
+  interrupted_exception::interrupted_exception(const std::string& message)
+      : std::runtime_error(message) {}
+
+  execution_exception::execution_exception(const execution_exception& other) 
+      : std::runtime_error(other) {}
+  execution_exception::execution_exception(const char* message, int errorCode)
+      : std::runtime_error(message), errorCode(errorCode) {}
+  execution_exception::execution_exception(const std::string& message, int errorCode)
+      : std::runtime_error(message), errorCode(errorCode) {}
+  int execution_exception::what_code() const noexcept {
+    return errorCode;
   }
 
-} // profiler_test
-} // profiler
+} // concurrent
 } // mdl

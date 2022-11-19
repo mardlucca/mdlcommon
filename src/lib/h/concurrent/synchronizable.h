@@ -26,12 +26,65 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_CONCURRENT_SYNCHRONIZABLE
+#define _MDL_CONCURRENT_SYNCHRONIZABLE
+
+#include <atomic>
+#include <functional>
+#include <memory>
+#include <mutex>
+#include <condition_variable>
+
+#include "../concurrent/threadlocal.hpp"
+
+namespace mdl {
+namespace concurrent {
+
+  class Synchronizable {
+    public: 
+      typedef std::unique_lock<std::mutex> lock_t;
+
+      Synchronizable();
+      Synchronizable(const Synchronizable& other);
+      Synchronizable(Synchronizable&& other) = delete;
+      virtual ~Synchronizable();
+
+      Synchronizable& operator=(const Synchronizable& other);
+      Synchronizable& operator=(Synchronizable&& other) = delete;
+
+      template<class T>
+      T Synchronized(std::function<T ()> operation) {
+        if (!threadLock) {
+          auto guard = threadLock.Set(new lock_t(mutex));
+          return operation();
+        }
+        
+        return operation();
+      }
+
+      // template<class T>
+      // T Synchronized(std::function<T ()> operation) const {
+      //   if (!threadLock) {
+      //     auto guard = threadLock.Set(new lock_t(mutex));
+      //     return operation();
+      //   }
+        
+      //   return operation();
+      // }
+
+      void Wait();
+      void Notify();
+      void NotifyAll();
+      void Interrupt();
+
+    private:
+      std::atomic_long interruptedSeq;
+      std::mutex mutex;
+      std::condition_variable condition;
+      mdl::concurrent::ThreadLocal<lock_t> threadLock;
+  };
+
+} // concurrent
+} // mdl
+
+#endif // _MDL_CONCURRENT_SYNCHRONIZABLE

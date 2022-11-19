@@ -26,4 +26,22 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "../src/lib/h/examplelib.h"
+#ifndef _MDL_TEXT_EXCEPTION
+#define _MDL_TEXT_EXCEPTION
+
+#include <stdexcept>
+
+namespace mdl {
+namespace text {
+
+  class parse_exception : public std::runtime_error {
+    public:
+      parse_exception(const parse_exception& other);
+      parse_exception(const char* message);
+      parse_exception(const std::string& message);
+  };
+
+} // text
+} // mdl
+
+#endif // _MDL_TEXT_EXCEPTION

@@ -26,12 +26,72 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#include "../../h/concurrent/executors.h"
+
+#include <iostream>
+
+namespace mdl {
+namespace concurrent {
+  ExecutorService::ExecutorService(int numThreads, ThreadFactory& threadFactory) 
+      : numThreads(numThreads) {
+    for (int i = 0; i < numThreads; i++) {
+      threads.push_back(threadFactory.NewThread(&ExecutorService::WorkerThreadFn, this));
+    }
   }
-}
+
+  ExecutorService::~ExecutorService() {
+    Shutdown();
+  }
+
+  void ExecutorService::Execute(std::function<void ()> task) {
+    queue.Add([task] () {
+      try {
+        task();
+      } catch (...) {}
+    });
+  }
+
+  void ExecutorService::Shutdown() {
+    if (shutdown) { return; }
+
+    shutdown = true;
+    std::thread stopper(&ExecutorService::ThreadInterrupterFn, this);
+
+    for (auto it = threads.begin(); it != threads.end(); it++) {
+      it->join();
+    }
+
+    stopper.join();
+  }
+
+  void ExecutorService::WorkerThreadFn() {
+    std::function<void ()> fn;
+
+    while (!shutdown) {
+      try {
+        fn = queue.Poll();
+      } catch (mdl::concurrent::interrupted_exception& ex) {
+        break;
+      }
+
+      try {
+        fn();
+      } catch (std::exception& ex) {
+        // TODO: What do we do here. Log, once logging supported.
+      } catch (...) {}
+    }
+
+    numStoppedThreads++;
+  }
+
+  void ExecutorService::ThreadInterrupterFn() {
+    const int delay = 100;
+
+    while (numStoppedThreads.load() < numThreads) {
+      queue.InterruptAll();
+      this_thread::sleep(delay);
+    }
+  }
+
+} // concurrent
+} // mdl

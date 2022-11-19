@@ -26,12 +26,54 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#include "../../h/text/numparse.h"
+
+#include "../../h/text/exception.h"
+#include "../../h/util/exception.h"
+
+
+namespace mdl {
+namespace text {
+
+  double ParseDouble(const std::string& val) {
+    try {
+      return std::stod(val);
+    } catch (const std::invalid_argument& e) {
+      throw mdl::util::exceptionstream()
+          .Append("Cannot covert '").Append(val).Append("' to a double.")
+          .Build<mdl::text::parse_exception>();
+    }
   }
-}
+
+  double ParseDouble(const std::wstring& val) {
+    try {
+      return std::stod(val);
+    } catch (const std::invalid_argument& e) {
+      throw mdl::util::wexceptionstream()
+          .Append("Cannot covert '").Append(val).Append("' to a double.")
+          .Build<mdl::text::parse_exception>();
+    }
+  }
+
+  int ParseInt(const std::string& val) {
+    try {
+      return std::stoi(val);
+    } catch (const std::invalid_argument& e) {
+      throw mdl::util::exceptionstream()
+          .Append("Cannot covert '").Append(val).Append("' to an int.")
+          .Build<mdl::text::parse_exception>();
+    }
+  }
+
+  int ParseInt(const std::wstring& val) {
+    try {
+      return std::stoi(val);
+    } catch (const std::invalid_argument& e) {
+      throw mdl::util::wexceptionstream()
+          .Append("Cannot covert '").Append(val).Append("' to an int.")
+          .Build<mdl::text::parse_exception>();
+    }
+  }
+
+} // text
+} // mdl

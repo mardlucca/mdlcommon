@@ -26,12 +26,24 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
+#include <gtest/gtest.h>
+#include <iostream>
+#include <thread>
+
+#include "mdl/util.h"
+
+using std::cout;
+using std::endl;
+
+TEST(TimeTestSuite, TestGetTimeMillis) {
+  cout << mdl::util::GetTimeMillis() << endl;
+}
+
+TEST(TimeTestSuite, TestNow) {
+  auto start = mdl::util::Now();
+  std::this_thread::sleep_for(std::chrono::duration<long, std::milli>(100));
+  auto end = mdl::util::Now();
+  long time = mdl::util::EllapsedTime(start, end) / 1000L;
+  // cout << mdl::util::EllapsedTime(start, end) << endl;
+  ASSERT_TRUE(time > 100 && time < 110);
 }

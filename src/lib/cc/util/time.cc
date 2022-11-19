@@ -26,12 +26,28 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
+#include "../../h/util/time.h"
+
+#include <chrono>
+
+namespace mdl {
+namespace util {
+
+  long GetTimeMillis() {
+    auto now = std::chrono::system_clock::now();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch())
+        .count();
   }
-}
+
+  instant Now() {
+    return std::chrono::steady_clock::now(); 
+  }
+
+  long EllapsedTime(const instant& start, const instant& end) {
+    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    // return diff2.count();
+  }
+
+
+} // util
+} // mdl

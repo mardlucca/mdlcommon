@@ -26,12 +26,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#include <atomic>
+#include <unordered_map>
+
+namespace mdl {
+namespace concurrent {
+  thread_local std::unordered_map<long, void*> _thread_local_vars;
+  std::atomic_long _thread_local_id_seq = 0;
+} // concurrent
+} // mdl

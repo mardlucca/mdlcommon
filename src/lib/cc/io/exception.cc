@@ -26,12 +26,26 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#include "../../h/io/exception.h"
+
+#include <exception>
+
+namespace mdl {
+namespace io {
+
+  io_exception::io_exception(const io_exception& other) 
+      : std::runtime_error(other) {}
+  io_exception::io_exception(const char* message)
+      : std::runtime_error(message) {}
+  io_exception::io_exception(const std::string& message)
+      : std::runtime_error(message) {}
+
+  file_not_found_exception::file_not_found_exception(
+      const file_not_found_exception& other) : io_exception(other) {}
+  file_not_found_exception::file_not_found_exception(const char* message)
+      : io_exception(message) {}
+  file_not_found_exception::file_not_found_exception(const std::string& message)
+      : io_exception(message) {}
+
+} // io
+} // mdl

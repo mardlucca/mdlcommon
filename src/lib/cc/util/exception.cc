@@ -26,18 +26,17 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "../h/examplelib.h"
-
-#include <iostream>
+#include "../../h/util/exception.h"
 
 namespace mdl {
-namespace example {
+namespace util {
 
-  int TimesTwo(int num) {
-    return num * 2;
-  }
+  not_found_exception::not_found_exception(const not_found_exception& other) 
+      : std::runtime_error(other) {}
+  not_found_exception::not_found_exception(const char* message)
+      : std::runtime_error(message) {}
+  not_found_exception::not_found_exception(const std::string& message)
+      : std::runtime_error(message) {}
 
-} // example
+} // util
 } // mdl
-
-

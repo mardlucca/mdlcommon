@@ -26,12 +26,26 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_UTIL_RESOURCE_POOL
+#define _MDL_UTIL_RESOURCE_POOL
+
+#include <list>
+#include <memory>
+
+namespace mdl {
+namespace util {
+
+  // template<class R>
+  // class ResourcePool {
+  //   public:
+  //     std::unique_ptr<R> Borrow();
+
+  //   private:
+  //     std::list<std::unique_ptr<R>> queue;
+  //     void Return(std::unique_ptr<R>&& resource);
+  // };
+
+} // util
+} // mdl
+
+#endif // _MDL_UTIL_RESOURCE_POOL

@@ -26,12 +26,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{
-  "files.associations": {
-    "utility": "cpp",
-    "iostream": "cpp",
-    "unordered_map": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
+#ifndef _MDL_CONCURRENT
+#define _MDL_CONCURRENT
+
+#include "src/lib/h/concurrent/exception.h"
+#include "src/lib/h/concurrent/executors.h"
+#include "src/lib/h/concurrent/future.hpp"
+#include "src/lib/h/concurrent/synchronizable.h"
+#include "src/lib/h/concurrent/threadlocal.hpp"
+#include "src/lib/h/concurrent/semaphore.h"
+#include "src/lib/h/concurrent/syncqueue.hpp"
+#include "src/lib/h/concurrent/thread.h"
+
+#endif // _MDL_CONCURRENT
