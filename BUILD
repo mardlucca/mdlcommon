@@ -33,7 +33,7 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-  name = "mdlcommon",
+  name = "mdl_common",
   srcs = glob(["src/lib/cc/**/*.cc"]),
   hdrs = glob(["src/lib/h/**/*.h", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
   includes = [ "includes" ],
@@ -42,7 +42,7 @@ cc_library(
 
 alias(
   name = "lib",
-  actual = ":mdlcommon"
+  actual = ":mdl_common"
 )
 
 cc_test(
