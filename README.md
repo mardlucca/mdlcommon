@@ -15,3 +15,31 @@ int, long, float, double, etc, assuming sizes provided in a 64bit system.
 use templated types and wchar/wstring, but not normally.
 * Better use of constness and const expressions. I'm now usingn c++20, and constexpr are used 
 everywhere now in the standard library. Might as well take advantage.
+
+# Including this into your Bazel project
+## In WORKSPACE
+
+```
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+  name = "mdl_common",
+  remote = "https://github.com/mardlucca/mdlcommon.git",
+  commit = "c0d28d1737ea0d358774a9c67f80089357471030",
+  shallow_since = "1668880362 -0500"
+)
+```
+
+## In your BUILD file
+
+```
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+  name = "main",
+  srcs = ["src/main/cc/main.cc"],
+  deps = [
+    "@mdl_common//:lib",
+  ]
+)
+```
