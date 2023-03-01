@@ -31,11 +31,11 @@
 
 #include "src/lib/h/concurrent/exception.h"
 #include "src/lib/h/concurrent/executors.h"
-#include "src/lib/h/concurrent/future.hpp"
+#include "src/lib/h/concurrent/future.h"
 #include "src/lib/h/concurrent/synchronizable.h"
-#include "src/lib/h/concurrent/threadlocal.hpp"
+#include "src/lib/h/concurrent/threadlocal.h"
 #include "src/lib/h/concurrent/semaphore.h"
-#include "src/lib/h/concurrent/syncqueue.hpp"
+#include "src/lib/h/concurrent/syncqueue.h"
 #include "src/lib/h/concurrent/thread.h"
 
 #endif // _MDL_CONCURRENT

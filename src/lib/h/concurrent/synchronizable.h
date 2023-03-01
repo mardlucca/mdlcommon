@@ -35,7 +35,7 @@
 #include <mutex>
 #include <condition_variable>
 
-#include "../concurrent/threadlocal.hpp"
+#include "../concurrent/threadlocal.h"
 
 namespace mdl {
 namespace concurrent {

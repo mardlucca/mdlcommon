@@ -33,7 +33,7 @@
 #include <string>
 #include <thread>
 
-#include "syncqueue.hpp"
+#include "syncqueue.h"
 
 #include <iostream>
 

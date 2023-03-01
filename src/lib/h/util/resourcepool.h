@@ -35,6 +35,8 @@
 namespace mdl {
 namespace util {
 
+  // TODO: IMPLEMENT THIS! :-)
+  
   // template<class R>
   // class ResourcePool {
   //   public:

@@ -33,8 +33,8 @@
 #include <functional>
 
 #include "exception.h"
-#include "future.hpp"
-#include "syncqueue.hpp"
+#include "future.h"
+#include "syncqueue.h"
 #include "thread.h"
 
 namespace mdl {
