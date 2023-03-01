@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
@@ -34,8 +33,8 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
   name = "mdl_common",
-  srcs = glob(["src/lib/cc/**/*.cc"]),
-  hdrs = glob(["src/lib/h/**/*.h", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
+  srcs = glob(["src/lib/cc/**/*.cc", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
+  hdrs = glob(["src/lib/h/**/*.h"]),
   includes = [ "includes" ],
   visibility = ["//visibility:public"]
 )
