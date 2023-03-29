@@ -193,5 +193,66 @@ namespace util {
     ASSERT_STREQ("Error: option '-a' requires a value\n", ss.str().c_str());
   }
 
+  TEST(GetOptsTestSuite, TestMissingValue2) {
+    std::ostringstream ss;
+    GetOpts getopts(ss);
+
+    std::vector<const char *> values;
+
+    getopts.AddOption('a', "aaa", [&values](const char* val) {
+      values.push_back(val);
+    });
+    
+    auto args = MakeArgs("--aaa");
+
+    ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
+    ASSERT_STREQ("Error: option '--aaa' requires a value\n", ss.str().c_str());
+  }
+
+  TEST(GetOptsTestSuite, TestUnexpectedValue) {
+    std::ostringstream ss;
+    GetOpts getopts(ss);
+
+    getopts.AddOption('a', "aaa", []() {});
+    
+    auto args = MakeArgs("--aaa", "val");
+
+    ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
+    ASSERT_STREQ("Error: unexpected value: val\n", ss.str().c_str());
+  }
+
+  TEST(GetOptsTestSuite, TestCollectingValues1) {
+    std::vector<const char *> values;
+    GetOpts getopts([&values](const char* val) {
+      values.push_back(val);
+    });
+
+    getopts.AddOption('a', "aaa", []() {});
+    
+    auto args = MakeArgs("1", "--aaa", "2");
+
+    ASSERT_TRUE(getopts.Parse(args.data(), args.size()));
+    ASSERT_EQ(2, values.size());
+    ASSERT_STREQ("1", values[0]);
+    ASSERT_STREQ("2", values[1]);
+  }
+
+  TEST(GetOptsTestSuite, TestCollectingValues2) {
+    std::vector<const char *> values;
+    GetOpts getopts([&values](const char* val) {
+      values.push_back(val);
+    });
+
+    getopts.AddOption('a', "aaa", [](const char* val) {
+      ASSERT_STREQ("1", val);
+    });
+    
+    auto args = MakeArgs("--aaa", "1", "2");
+
+    ASSERT_TRUE(getopts.Parse(args.data(), args.size()));
+    ASSERT_EQ(1, values.size());
+    ASSERT_STREQ("2", values[0]);
+  }
+
 } // namespace util
 } // namespace mdl

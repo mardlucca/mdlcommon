@@ -46,6 +46,7 @@ namespace util {
       };
 
       GetOpts(std::ostream& out = std::cout);
+      GetOpts(std::function<void (const char* value)> valueHandler, std::ostream& out = std::cout);
       void AddOption(char shortForm, std::function<void (const char* value)> callback);
       void AddOption(char shortForm, std::function<void ()> callback);
       void AddOption(const char* longForm, std::function<void (const char* value)> callback);
@@ -56,6 +57,7 @@ namespace util {
       bool Parse(const char** args, int argc);
     private:
       std::vector<Option> options;
+      Option valueOption;
       std::ostream& out;
 
       bool Validate(const char** args, int argc, std::vector<Option *> * usedOptions);

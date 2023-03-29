@@ -35,7 +35,9 @@ namespace mdl {
 namespace util {
   using std::endl;
   
-  GetOpts::GetOpts(std::ostream& out) : out(out) {}
+  GetOpts::GetOpts(std::ostream& out) : GetOpts(nullptr, out) {}
+  GetOpts::GetOpts(std::function<void (const char* value)> valueHandler, std::ostream& out) 
+      : valueOption({.valued = false, .callback = valueHandler}), out(out) {}
 
   void GetOpts::AddOption(char shortForm, std::function<void (const char* value)> callback) {
     AddOption(shortForm, nullptr, callback);
@@ -79,7 +81,7 @@ namespace util {
         option->callback(args[i + 1]);
         i += 2;
       } else {
-        option->callback(nullptr);
+        option->callback(args[i]);
         i++;
       }
     }
@@ -128,9 +130,18 @@ namespace util {
       } else {
         // must identify the used option
         Option * opt = FindOption(args[i]);
+        
         if (!opt) {
-          out << "Error: unrecognized option: " << args[i] << endl;
-          return false;
+          if (valueOption.callback) {
+            opt = &valueOption; 
+          } else {
+            if (IsShortOption(args[i]) || IsLongOption(args[i])) {
+              out << "Error: unrecognized option: " << args[i] << endl;
+            } else {
+              out << "Error: unexpected value: " << args[i] << endl;
+            }
+            return false;
+          }
         }
 
         if (opt->valued) {
