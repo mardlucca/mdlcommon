@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2023, Marcio Lucca
+// Copyright (c) 2023, Marcio Lucca
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -26,12 +26,43 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MDL_UTIL
-#define _MDL_UTIL
+#ifndef _MDL_UTIL_GETOPTS
+#define _MDL_UTIL_GETOPTS
 
-#include "src/lib/h/util/exception.h"
-#include "src/lib/h/util/getopts.h"
-#include "src/lib/h/util/string.h"
-#include "src/lib/h/util/time.h"
+#include <iostream>
+#include <functional>
+#include <vector>
 
-#endif // _MDL_UTIL
+namespace mdl {
+namespace util {
+
+  class GetOpts {
+    public:
+      struct Option {
+          char shortForm;
+          const char* longForm;
+          bool valued;
+          std::function<void (const char*)> callback;
+      };
+
+      GetOpts(std::ostream& out = std::cout);
+      void AddOption(char shortForm, std::function<void (const char* value)> callback);
+      void AddOption(char shortForm, std::function<void ()> callback);
+      void AddOption(const char* longForm, std::function<void (const char* value)> callback);
+      void AddOption(const char* longForm, std::function<void ()> callback);
+      void AddOption(char shortForm, const char* longForm, std::function<void (const char* value)> callback);
+      void AddOption(char shortForm, const char* longForm, std::function<void ()> callback);
+
+      bool Parse(const char** args, int argc);
+    private:
+      std::vector<Option> options;
+      std::ostream& out;
+
+      bool Validate(const char** args, int argc, std::vector<Option *> * usedOptions);
+      Option * FindOption(const char* str);
+  };
+
+} // util
+} // mdl
+
+#endif // _MDL_UTIL_GETOPTS
