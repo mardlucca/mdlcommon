@@ -33,8 +33,8 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
   name = "mdl_common",
-  srcs = glob(["src/lib/cc/**/*.cc", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
-  hdrs = glob(["src/lib/h/**/*.h"]),
+  srcs = glob(["src/lib/cc/**/*.cc", "src/lib/h/**/*.h"]),
+  hdrs = glob(["includes/**/*.h"]),
   includes = [ "includes" ],
   visibility = ["//visibility:public"]
 )

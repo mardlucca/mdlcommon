@@ -32,7 +32,7 @@
 #include <mutex>
 #include <unordered_set>
 
-#include "mdl/concurrent.h"
+#include <mdl/concurrent.h>
 
 using std::cout;
 using std::endl;

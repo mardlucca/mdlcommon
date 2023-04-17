@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "mdl/concurrent.h"
+#include <mdl/concurrent.h>
 
 #include <mutex>
 
