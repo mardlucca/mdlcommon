@@ -74,7 +74,7 @@ namespace util {
 
     if (!Validate(args, argc, &usedOptions)) { return false; }
 
-    int i = 0;
+    int i = 1;
     for (auto it = usedOptions.begin(); it != usedOptions.end(); it++) {
       Option * option = *it;
       if (option->valued) {
@@ -110,8 +110,10 @@ namespace util {
       }
     } else if (IsLongOption(str)) {
       for (auto it = options.begin(); it != options.end() && !option; it++) {
-        if (std::strcmp(str + 2, it->longForm) == 0) {
-          option = &(*it);
+        if (it->longForm) {
+          if (std::strcmp(str + 2, it->longForm) == 0) {
+            option = &(*it);
+          }
         }
       }
     } 
@@ -122,7 +124,7 @@ namespace util {
   bool GetOpts::Validate(const char** args, int argc, std::vector<Option *> * usedOptions) {
     Option * currOption = nullptr;
 
-    for (int i = 0; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
       if (currOption) {
         // must read a value for the current option
         usedOptions->push_back(currOption);
@@ -136,9 +138,9 @@ namespace util {
             opt = &valueOption; 
           } else {
             if (IsShortOption(args[i]) || IsLongOption(args[i])) {
-              out << "Error: unrecognized option: " << args[i] << endl;
+              out << "ERROR: unrecognized option: " << args[i] << endl;
             } else {
-              out << "Error: unexpected value: " << args[i] << endl;
+              out << "ERROR: unexpected value: " << args[i] << endl;
             }
             return false;
           }
@@ -153,7 +155,7 @@ namespace util {
     }
 
     if (currOption) {
-      out << "Error: option '" << args[argc - 1] << "' requires a value" << endl;
+      out << "ERROR: option '" << args[argc - 1] << "' requires a value" << endl;
       return false;
     }
 

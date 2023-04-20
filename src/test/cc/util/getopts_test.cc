@@ -52,6 +52,7 @@ namespace util {
   template <class... Args>
   std::vector<const char *> MakeArgs(Args... args) {
     std::vector<const char *> vec;
+    vec.push_back("MakeArgs");
     DoMakeArgs(vec, args...);
     return vec;
   }
@@ -174,7 +175,23 @@ namespace util {
     auto args = MakeArgs("-a", "val1", "-x", "val2");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("Error: unrecognized option: -x\n", ss.str().c_str());
+    ASSERT_STREQ("ERROR: unrecognized option: -x\n", ss.str().c_str());
+  }
+
+  TEST(GetOptsTestSuite, TestUnrecognizedOption2) {
+    std::ostringstream ss;
+    GetOpts getopts(ss);
+
+    std::vector<const char *> values;
+
+    getopts.AddOption('a', "aaa", [&values](const char* val) {
+      values.push_back(val);
+    });
+    
+    auto args = MakeArgs("--x");
+
+    ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
+    ASSERT_STREQ("ERROR: unrecognized option: --x\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestMissingValue1) {
@@ -190,7 +207,7 @@ namespace util {
     auto args = MakeArgs("-a");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("Error: option '-a' requires a value\n", ss.str().c_str());
+    ASSERT_STREQ("ERROR: option '-a' requires a value\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestMissingValue2) {
@@ -199,14 +216,14 @@ namespace util {
 
     std::vector<const char *> values;
 
-    getopts.AddOption('a', "aaa", [&values](const char* val) {
+    getopts.AddOption('a', [&values](const char* val) {
       values.push_back(val);
     });
     
-    auto args = MakeArgs("--aaa");
+    auto args = MakeArgs("--a");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("Error: option '--aaa' requires a value\n", ss.str().c_str());
+    ASSERT_STREQ("ERROR: unrecognized option: --a\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestUnexpectedValue) {
@@ -218,7 +235,7 @@ namespace util {
     auto args = MakeArgs("--aaa", "val");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("Error: unexpected value: val\n", ss.str().c_str());
+    ASSERT_STREQ("ERROR: unexpected value: val\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestCollectingValues1) {
