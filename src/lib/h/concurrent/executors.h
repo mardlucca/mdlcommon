@@ -49,10 +49,10 @@ namespace concurrent {
       ExecutorService& operator=(const ExecutorService& other) = delete;
       ExecutorService& operator=(ExecutorService&& other) = delete;
 
-      void Execute(std::function<void ()> task);
+      void Execute(const std::function<void ()>& task);
 
       template <class T>
-      Future<T> Submit(std::function<T ()> task);
+      Future<T> Submit(const std::function<T ()>& task);
 
       void Shutdown();
     private:
@@ -68,7 +68,7 @@ namespace concurrent {
   
 
   template <class T>
-  Future<T> ExecutorService::Submit(std::function<T ()> task) {
+  Future<T> ExecutorService::Submit(const std::function<T ()>& task) {
     Future<T> future;
     queue.Add([future, task]() mutable {
       if (future.IsCanceled()) { return; }

@@ -48,12 +48,12 @@ namespace concurrent {
       void Up();
 
       template<class T>
-      T Up(std::function<T (long)> doBeforeFn);
+      T Up(std::function<T (long)>&& doBeforeFn);
       
       void Down();
 
       template<class T>
-      T Down(std::function<T (long)> doAfterFn);
+      T Down(std::function<T (long)>&& doAfterFn);
 
       long NumTickets() const;
       
@@ -64,7 +64,7 @@ namespace concurrent {
   };
 
   template<class T>
-  T Semaphore::Up(std::function<T (long)> doBeforeFn) {
+  T Semaphore::Up(std::function<T (long)>&& doBeforeFn) {
     return sync.Synchronized<T>([this, &doBeforeFn]() {
       T val = doBeforeFn(tickets);
       tickets++;
@@ -74,10 +74,10 @@ namespace concurrent {
   }
 
   template<>
-  void Semaphore::Up<void>(std::function<void (long)> doBeforeFn);
+  void Semaphore::Up<void>(std::function<void (long)>&& doBeforeFn);
 
   template<class T>
-  T Semaphore::Down(std::function<T (long)> doAfterFn) {
+  T Semaphore::Down(std::function<T (long)>&& doAfterFn) {
     return sync.Synchronized<T>([this, &doAfterFn]() {
       tickets--;
       if (tickets < 0) {
@@ -88,7 +88,7 @@ namespace concurrent {
   }
 
   template<>
-  void Semaphore::Down<void>(std::function<void (long)> doAfterFn);
+  void Semaphore::Down<void>(std::function<void (long)>&& doAfterFn);
 
 } // concurrent
 } // mdl

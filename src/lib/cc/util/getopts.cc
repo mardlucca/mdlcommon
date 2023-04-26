@@ -36,23 +36,23 @@ namespace util {
   using std::endl;
   
   GetOpts::GetOpts(std::ostream& out) : GetOpts(nullptr, out) {}
-  GetOpts::GetOpts(std::function<void (const char* value)> valueHandler, std::ostream& out) 
+  GetOpts::GetOpts(const std::function<void (const char* value)>& valueHandler, std::ostream& out) 
       : valueOption({.valued = false, .callback = valueHandler}), out(out) {}
 
-  void GetOpts::AddOption(char shortForm, std::function<void (const char* value)> callback) {
+  void GetOpts::AddOption(char shortForm, const std::function<void (const char* value)>& callback) {
     AddOption(shortForm, nullptr, callback);
   }
-  void GetOpts::AddOption(char shortForm, std::function<void ()> callback) {
+  void GetOpts::AddOption(char shortForm, const std::function<void ()>& callback) {
     AddOption(shortForm, nullptr, callback);
   }
-  void GetOpts::AddOption(const char* longForm, std::function<void (const char* value)> callback) {
+  void GetOpts::AddOption(const char* longForm, const std::function<void (const char* value)>& callback) {
     AddOption('\0', longForm, callback);
   }
-  void GetOpts::AddOption(const char* longForm, std::function<void ()> callback) {
+  void GetOpts::AddOption(const char* longForm, const std::function<void ()>& callback) {
     AddOption('\0', longForm, callback);
   }
   void GetOpts::AddOption(
-      char shortForm, const char* longForm, std::function<void (const char*)> callback) {
+      char shortForm, const char* longForm, const std::function<void (const char*)>& callback) {
     options.push_back({
       .shortForm = shortForm,
       .longForm = longForm,
@@ -60,7 +60,7 @@ namespace util {
       .callback = callback
     });
   }
-  void GetOpts::AddOption(char shortForm, const char* longForm, std::function<void ()> callback) {
+  void GetOpts::AddOption(char shortForm, const char* longForm, const std::function<void ()>& callback) {
     options.push_back({
       .shortForm = shortForm,
       .longForm = longForm,

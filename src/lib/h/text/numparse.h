@@ -29,17 +29,13 @@
 #ifndef _MDL_TEXT_NUMPARSE
 #define _MDL_TEXT_NUMPARSE
 
-#include <string>
-
-#include "exception.h"
+#include <string_view>
 
 namespace mdl {
 namespace text {
 
-  double ParseDouble(const std::string& val);
-  double ParseDouble(const std::wstring& val);
-  int ParseInt(const std::string& val);
-  int ParseInt(const std::wstring& val);
+  double ParseDouble(const std::string_view& val);
+  int ParseInt(const std::string_view& val);
 
 } // text
 } // mdl

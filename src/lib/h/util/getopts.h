@@ -46,13 +46,13 @@ namespace util {
       };
 
       GetOpts(std::ostream& out = std::cout);
-      GetOpts(std::function<void (const char* value)> valueHandler, std::ostream& out = std::cout);
-      void AddOption(char shortForm, std::function<void (const char* value)> callback);
-      void AddOption(char shortForm, std::function<void ()> callback);
-      void AddOption(const char* longForm, std::function<void (const char* value)> callback);
-      void AddOption(const char* longForm, std::function<void ()> callback);
-      void AddOption(char shortForm, const char* longForm, std::function<void (const char* value)> callback);
-      void AddOption(char shortForm, const char* longForm, std::function<void ()> callback);
+      GetOpts(const std::function<void (const char* value)>& valueHandler, std::ostream& out = std::cout);
+      void AddOption(char shortForm, const std::function<void (const char* value)>& callback);
+      void AddOption(char shortForm, const std::function<void ()>& callback);
+      void AddOption(const char* longForm, const std::function<void (const char* value)>& callback);
+      void AddOption(const char* longForm, const std::function<void ()>& callback);
+      void AddOption(char shortForm, const char* longForm, const std::function<void (const char* value)>& callback);
+      void AddOption(char shortForm, const char* longForm, const std::function<void ()>& callback);
 
       bool Parse(const char** args, int argc);
     private:

@@ -41,7 +41,7 @@ namespace concurrent {
   }
 
   template<>
-  void Semaphore::Up<void>(std::function<void (long)> doBeforeFn) {
+  void Semaphore::Up<void>(std::function<void (long)>&& doBeforeFn) {
     return sync.Synchronized<void>([this, &doBeforeFn]() {
       doBeforeFn(tickets);
       tickets++;
@@ -59,7 +59,7 @@ namespace concurrent {
   }
 
   template<>
-  void Semaphore::Down<void> (std::function<void (long)> doAfterFn) {
+  void Semaphore::Down<void> (std::function<void (long)>&& doAfterFn) {
      sync.Synchronized<void>([this, &doAfterFn]() {
       tickets--;
       if (tickets < 0) {

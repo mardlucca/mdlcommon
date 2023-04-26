@@ -43,7 +43,7 @@ namespace concurrent {
     Shutdown();
   }
 
-  void ExecutorService::Execute(std::function<void ()> task) {
+  void ExecutorService::Execute(const std::function<void ()>& task) {
     queue.Add([task] () {
       try {
         task();

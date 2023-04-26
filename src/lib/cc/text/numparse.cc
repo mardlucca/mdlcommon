@@ -31,13 +31,15 @@
 #include "../../h/text/exception.h"
 #include "../../h/util/exception.h"
 
+#include <string>
 
 namespace mdl {
 namespace text {
 
-  double ParseDouble(const std::string& val) {
+  double ParseDouble(const std::string_view& val) {
     try {
-      return std::stod(val);
+      // TODO: reimplement without allocating std::string
+      return std::stod(std::string(val));
     } catch (const std::invalid_argument& e) {
       throw mdl::util::exceptionstream()
           .Append("Cannot covert '").Append(val).Append("' to a double.")
@@ -45,35 +47,15 @@ namespace text {
     }
   }
 
-  double ParseDouble(const std::wstring& val) {
+  int ParseInt(const std::string_view& val) {
     try {
-      return std::stod(val);
-    } catch (const std::invalid_argument& e) {
-      throw mdl::util::wexceptionstream()
-          .Append("Cannot covert '").Append(val).Append("' to a double.")
-          .Build<mdl::text::parse_exception>();
-    }
-  }
-
-  int ParseInt(const std::string& val) {
-    try {
-      return std::stoi(val);
+      // TODO: reimplement without allocating std::string
+      return std::stoi(std::string(val));
     } catch (const std::invalid_argument& e) {
       throw mdl::util::exceptionstream()
           .Append("Cannot covert '").Append(val).Append("' to an int.")
           .Build<mdl::text::parse_exception>();
     }
   }
-
-  int ParseInt(const std::wstring& val) {
-    try {
-      return std::stoi(val);
-    } catch (const std::invalid_argument& e) {
-      throw mdl::util::wexceptionstream()
-          .Append("Cannot covert '").Append(val).Append("' to an int.")
-          .Build<mdl::text::parse_exception>();
-    }
-  }
-
 } // text
 } // mdl

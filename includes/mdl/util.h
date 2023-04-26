@@ -30,6 +30,7 @@
 #define _MDL_UTIL
 
 #include "src/lib/h/util/exception.h"
+#include "src/lib/h/util/functional.h"
 #include "src/lib/h/util/getopts.h"
 #include "src/lib/h/util/string.h"
 #include "src/lib/h/util/time.h"

@@ -105,6 +105,8 @@
     "type_traits": "cpp",
     "typeinfo": "cpp",
     "unordered_set": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "__functional_03": "cpp",
+    "filesystem": "cpp"
   }
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2022, Marcio Lucca
+// Copyright (c) 2023, Marcio Lucca
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -26,37 +26,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <gtest/gtest.h>
-#include <iostream>
-#include <sstream>
-
-
-#include "mdl/io.h"
-#include "mdl/text.h"
+#include "../../h/util/functional.h"
 
 namespace mdl {
-namespace text {
+namespace util {
+namespace functional {
 
-  TEST(NumParseTestSuite, TestParseDouble) {
-    ASSERT_EQ(1.2345, mdl::text::ParseDouble("1.2345"));
-    ASSERT_EQ(1.23, mdl::text::ParseDouble("1.23"));
-  }
+  int Negate(int val) { return -val; }
+  bool IsEven(int val) { return (val & 1) == 0; }
+  bool IsOdd(int val) { return val & 1; }
 
-  TEST(NumParseTestSuite, TestParseDouble_Invalid) {
-    ASSERT_THROW(mdl::text::ParseDouble("az1"), mdl::text::parse_exception);
-  }
-
-  TEST(NumParseTestSuite, TestParseInt) {
-    ASSERT_EQ(12, mdl::text::ParseInt("12"));
-    ASSERT_EQ(13, mdl::text::ParseInt(" 13"));
-    ASSERT_EQ(14, mdl::text::ParseInt("14 "));
-
-    ASSERT_EQ(15, mdl::text::ParseInt(" 15 "));
-  }
-
-  TEST(NumParseTestSuite, TestParseInt_Invalid) {
-    ASSERT_THROW(mdl::text::ParseInt("z12"), mdl::text::parse_exception);
-  }
-
-} // namespace text
-} // namespace mdl
+} // functional
+} // util
+} // mdl

@@ -53,7 +53,7 @@ namespace concurrent {
       Synchronizable& operator=(Synchronizable&& other) = delete;
 
       template<class T>
-      T Synchronized(std::function<T ()> operation) {
+      T Synchronized(std::function<T ()>&& operation) {
         if (!threadLock) {
           auto guard = threadLock.Set(new lock_t(mutex));
           return operation();
@@ -61,16 +61,6 @@ namespace concurrent {
         
         return operation();
       }
-
-      // template<class T>
-      // T Synchronized(std::function<T ()> operation) const {
-      //   if (!threadLock) {
-      //     auto guard = threadLock.Set(new lock_t(mutex));
-      //     return operation();
-      //   }
-        
-      //   return operation();
-      // }
 
       void Wait();
       void Notify();
