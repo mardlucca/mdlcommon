@@ -38,6 +38,9 @@ using std::endl;
 
 namespace mdl {
 namespace util {
+namespace cli {
+
+  void DoMakeArgs(std::vector<const char *> &vec) {}
 
   void DoMakeArgs(std::vector<const char *> &vec, const char* arg1) {
     vec.push_back(arg1);
@@ -271,5 +274,52 @@ namespace util {
     ASSERT_STREQ("2", values[0]);
   }
 
+  int ArgCount(const char** args, int argc) {
+    return argc;
+  }
+  int TestMainSwitch2(const char** args, int argc) {
+    return 20;
+  }
+
+  TEST(GetOptsTestSuite, TestMainSwitch) {
+    CommandSwitch commandSwitch;
+    commandSwitch
+        .AddCommand("cmd1", ArgCount)
+        .AddCommand("cmd2", TestMainSwitch2);
+
+    auto args = MakeArgs("cmd1", "1", "2");
+    ASSERT_EQ(3, commandSwitch.Go(args.data(), args.size()));
+    args = MakeArgs("cmd2", "1", "2");
+    ASSERT_EQ(20, commandSwitch.Go(args.data(), args.size()));
+  }
+
+  TEST(GetOptsTestSuite, TestMainSwitch_Missing) {
+    bool missing = false;
+    CommandSwitch commandSwitch(
+        [&missing](const char* command) { missing = command == nullptr; return 21; });
+    commandSwitch
+        .AddCommand("cmd1", ArgCount)
+        .AddCommand("cmd2", TestMainSwitch2);
+
+    auto args = MakeArgs();
+    ASSERT_EQ(21, commandSwitch.Go(args.data(), args.size()));
+    ASSERT_TRUE(missing);
+  }
+
+  TEST(GetOptsTestSuite, TestMainSwitch_Unknown) {
+    bool unknown = false;
+    const char* blah = "blah";
+    CommandSwitch commandSwitch(
+        [&unknown, blah](const char* command) { unknown = command == blah; return 22; });
+    commandSwitch
+        .AddCommand("cmd1", ArgCount)
+        .AddCommand("cmd2", TestMainSwitch2);
+
+    auto args = MakeArgs(blah, "-h");
+    ASSERT_EQ(22, commandSwitch.Go(args.data(), args.size()));
+    ASSERT_TRUE(unknown);
+  }
+
+} // namespace cli
 } // namespace util
 } // namespace mdl

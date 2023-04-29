@@ -33,6 +33,8 @@
 
 namespace mdl {
 namespace util {
+namespace cli {
+
   using std::endl;
   
   GetOpts::GetOpts(std::ostream& out) : GetOpts(nullptr, out) {}
@@ -162,5 +164,23 @@ namespace util {
     return true;
   }
 
+  CommandSwitch::CommandSwitch(const std::function<int (const char*)>& onUnknown) : onUnknown(onUnknown) {}
+
+  CommandSwitch& CommandSwitch::AddCommand(const char* command, mainFnType mainFn) {
+    commands[command] = mainFn;
+    return *this;
+  }
+
+  int CommandSwitch::Go(const char** args, int argc) {
+    if (argc < 2) {
+      return onUnknown(nullptr);
+    }
+    if (!commands.contains(args[1])) {
+      return onUnknown(args[1]);
+    }
+
+    return commands[args[1]](args + 1, argc - 1);
+  }
+} // cli
 } // util
 } // mdl

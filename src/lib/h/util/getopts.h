@@ -31,10 +31,12 @@
 
 #include <iostream>
 #include <functional>
+#include <unordered_map>
 #include <vector>
 
 namespace mdl {
 namespace util {
+namespace cli {
 
   class GetOpts {
     public:
@@ -64,6 +66,19 @@ namespace util {
       Option * FindOption(const char* str);
   };
 
+  class CommandSwitch {
+    public:
+      typedef int (* mainFnType)(const char**, int);
+
+      CommandSwitch(const std::function<int (const char*)>& onUnknown = [](const char*) -> int { return 0; });
+      CommandSwitch& AddCommand(const char* command, mainFnType mainFn);
+      int Go(const char**, int);
+    private:
+      std::unordered_map<const char *, mainFnType> commands;
+      std::function<int (const char*)> onUnknown;
+  };
+
+} // cli
 } // util
 } // mdl
 
