@@ -121,13 +121,21 @@ namespace functional {
   };
 
   template <class T>
-  std::function<T* ()> SupplyOne(T* value) {
+  std::function<T* ()> AsSupplier(const std::function<std::unique_ptr<T> ()>& supplier) {
+    return [supplier, val = std::shared_ptr<T>()] () mutable {
+      val = supplier();
+      return val.get();
+    };
+  }
+
+  template <class T>
+  std::function<T* ()> AsSupplier(T* value) {
     return [supplied = false, value] () mutable {
       T* result = supplied ? nullptr : value;
       supplied = true;
       return result;
     };
-  };
+  }
 
 } // namespace functional
 } // namespace util

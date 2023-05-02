@@ -136,16 +136,18 @@ namespace cli {
         Option * opt = FindOption(args[i]);
         
         if (!opt) {
-          if (valueOption.callback) {
-            opt = &valueOption; 
-          } else {
-            if (IsShortOption(args[i]) || IsLongOption(args[i])) {
-              out << "ERROR: unrecognized option: " << args[i] << endl;
-            } else {
-              out << "ERROR: unexpected value: " << args[i] << endl;
-            }
+          if (IsShortOption(args[i]) || IsLongOption(args[i])) {
+            out << "error: unrecognized option: " << args[i] << endl;
             return false;
+          } 
+          
+          if (valueOption.callback) {
+            usedOptions->push_back(&valueOption);
+            continue;
           }
+
+          out << "error: unexpected value: " << args[i] << endl;
+          return false;
         }
 
         if (opt->valued) {
@@ -157,7 +159,7 @@ namespace cli {
     }
 
     if (currOption) {
-      out << "ERROR: option '" << args[argc - 1] << "' requires a value" << endl;
+      out << "error: option '" << args[argc - 1] << "' requires a value" << endl;
       return false;
     }
 

@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <functional>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -74,7 +75,7 @@ namespace cli {
       CommandSwitch& AddCommand(const char* command, mainFnType mainFn);
       int Go(const char**, int);
     private:
-      std::unordered_map<const char *, mainFnType> commands;
+      std::unordered_map<std::string_view, mainFnType> commands;
       std::function<int (const char*)> onUnknown;
   };
 

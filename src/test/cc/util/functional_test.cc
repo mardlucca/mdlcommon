@@ -103,9 +103,9 @@ namespace functional {
     }
   }
 
-  TEST(FunctionalTestSuite, TestSupplyOne) {
+  TEST(FunctionalTestSuite, TestPointerAsSupplier) {
     int x = 10;
-    auto supplier = SupplyOne(&x);
+    auto supplier = AsSupplier(&x);
 
     ASSERT_EQ(x, *supplier());
     ASSERT_EQ(nullptr, supplier());
