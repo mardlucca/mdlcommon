@@ -178,7 +178,7 @@ namespace cli {
     auto args = MakeArgs("-a", "val1", "-x", "val2");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("ERROR: unrecognized option: -x\n", ss.str().c_str());
+    ASSERT_STREQ("error: unrecognized option: -x\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestUnrecognizedOption2) {
@@ -194,7 +194,7 @@ namespace cli {
     auto args = MakeArgs("--x");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("ERROR: unrecognized option: --x\n", ss.str().c_str());
+    ASSERT_STREQ("error: unrecognized option: --x\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestMissingValue1) {
@@ -210,7 +210,7 @@ namespace cli {
     auto args = MakeArgs("-a");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("ERROR: option '-a' requires a value\n", ss.str().c_str());
+    ASSERT_STREQ("error: option '-a' requires a value\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestMissingValue2) {
@@ -226,7 +226,7 @@ namespace cli {
     auto args = MakeArgs("--a");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("ERROR: unrecognized option: --a\n", ss.str().c_str());
+    ASSERT_STREQ("error: unrecognized option: --a\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestUnexpectedValue) {
@@ -238,7 +238,7 @@ namespace cli {
     auto args = MakeArgs("--aaa", "val");
 
     ASSERT_FALSE(getopts.Parse(args.data(), args.size()));
-    ASSERT_STREQ("ERROR: unexpected value: val\n", ss.str().c_str());
+    ASSERT_STREQ("error: unexpected value: val\n", ss.str().c_str());
   }
 
   TEST(GetOptsTestSuite, TestCollectingValues1) {

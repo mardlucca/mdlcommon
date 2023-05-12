@@ -43,7 +43,7 @@ namespace text {
 
   StdOutCsvParseListener StdOutCsvParseListener::_instance;
 
-  StdOutCsvParseListener::StdOutCsvParseListener(wchar_t quoteChar, wchar_t delimiterChar) 
+  StdOutCsvParseListener::StdOutCsvParseListener(char quoteChar, char delimiterChar) 
       : count(0), quoteChar(quoteChar), delimiterChar(delimiterChar) {}
 
   void StdOutCsvParseListener::OnNewLine() {
@@ -73,10 +73,10 @@ namespace text {
   };
 
   CsvParseState CsvParseHandleInitial(
-      wchar_t ch, 
+      char ch, 
       std::wstring& value,
-      wchar_t quoteChar, 
-      wchar_t separatorChr,
+      char quoteChar, 
+      char separatorChr,
       ICsvParseListener& listener) {
     if (ch == '\n' || ch == -1) {
       // ignore blank lines
@@ -98,10 +98,10 @@ namespace text {
   }
 
   CsvParseState CsvParseHandleReading(
-      wchar_t ch, 
+      char ch, 
       std::wstring& value,
-      wchar_t quoteChar, 
-      wchar_t separatorChr,
+      char quoteChar, 
+      char separatorChr,
       ICsvParseListener& listener) {
     if (ch == '\n') {
       listener.OnValue(value);
@@ -131,10 +131,10 @@ namespace text {
   }
 
   CsvParseState CsvParseHandleUnquotedReading(
-      wchar_t ch, 
+      char ch, 
       std::wstring& value,
-      wchar_t quoteChar, 
-      wchar_t separatorChr,
+      char quoteChar, 
+      char separatorChr,
       ICsvParseListener& listener) {
     if (ch == '\n') {
       listener.OnValue(value);
@@ -161,10 +161,10 @@ namespace text {
   }
 
   CsvParseState CsvParseHandleQuotedReading(
-      wchar_t ch, 
+      char ch, 
       std::wstring& value,
-      wchar_t quoteChar, 
-      wchar_t separatorChr,
+      char quoteChar, 
+      char separatorChr,
       ICsvParseListener& listener) {
     if (ch == -1) {
       throw mdl::text::parse_exception("Unterminated quoted field in CSV"); 
@@ -181,10 +181,10 @@ namespace text {
   }
 
   CsvParseState CsvParseHandleQuotedFoundQuote(
-      wchar_t ch, 
+      char ch, 
       std::wstring& value,
-      wchar_t quoteChar, 
-      wchar_t separatorChr,
+      char quoteChar, 
+      char separatorChr,
       ICsvParseListener& listener) {
     if (ch == '\n') {
       listener.OnValue(value);
@@ -211,13 +211,7 @@ namespace text {
     }
 
     mdl::util::exceptionstream es;
-    es << "Unexpected character ";
-    if (ch < 256) {
-      es << '\'' << (char) ch << '\'';
-    } else {
-      es << "(Code " << ch << ")";
-    }
-    es << " after quotes";
+    es << "Unexpected character " << '\'' << (char) ch << '\'' << " after quotes";
 
     throw es.Build<mdl::text::parse_exception>();
   }
@@ -228,13 +222,13 @@ namespace text {
   void CsvParse(
       std::wistream& in, 
       ICsvParseListener& listener,
-      wchar_t quoteChar, 
-      wchar_t separatorChr) {
+      char quoteChar, 
+      char separatorChr) {
     CsvParseState state = CsvParseState::initial;
     std::wstring value;
 
     while (!in.eof()) {
-      wchar_t ch = in.get();
+      char ch = in.get();
 
       switch (state) {
         case CsvParseState::initial:
@@ -260,8 +254,8 @@ namespace text {
 
   void CsvParse(const char* fileName, 
       ICsvParseListener& listener,
-      wchar_t quoteChar, 
-      wchar_t separatorChr) {
+      char quoteChar, 
+      char separatorChr) {
     std::wifstream in(fileName);
 
     if (!in) {

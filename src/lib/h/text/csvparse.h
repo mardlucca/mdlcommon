@@ -45,23 +45,23 @@ namespace text {
   class StdOutCsvParseListener : public ICsvParseListener {
     public:
       StdOutCsvParseListener(
-        wchar_t quoteChar = L'"', wchar_t delimiterChar = L',');
+        char quoteChar = '"', char delimiterChar = ',');
       void OnNewLine() override;
       void OnValue(const std::wstring& val) override;
 
       static ICsvParseListener& GetInstance();
     private:
       int count;
-      wchar_t quoteChar;
-      wchar_t delimiterChar;
+      char quoteChar;
+      char delimiterChar;
 
       static StdOutCsvParseListener _instance;
   };
 
   void CsvParse(std::wistream& in, ICsvParseListener& listener,
-      wchar_t quoteChar = L'"', wchar_t separatorChr = L',');
+      char quoteChar = '"', char separatorChr = ',');
   void CsvParse(const char* fileName, ICsvParseListener& listener,
-      wchar_t quoteChar = L'"', wchar_t separatorChr = L',');
+      char quoteChar = '"', char separatorChr = ',');
 
 } // namespace text
 } // namespace mdl

@@ -43,10 +43,10 @@ namespace util {
       not_found_exception(const std::string& message);
   };
 
-  template<class CharT>
-  class basic_exceptionstream : public std::basic_ostringstream<CharT> {
+  template<class CharT, class Traits = std::char_traits<CharT>, class Allocator = std::allocator<CharT>>
+  class basic_exceptionstream : public std::basic_ostringstream<CharT, Traits, Allocator> {
     public:
-      basic_exceptionstream() : std::basic_ostringstream<CharT>() {}
+      basic_exceptionstream() : std::basic_ostringstream<CharT, Traits, Allocator>() {}
 
       template<class Value>
       basic_exceptionstream& Append(Value val) {
@@ -66,30 +66,8 @@ namespace util {
     public:
       exceptionstream() : basic_exceptionstream<char>() {}
 
-      template<class Exception = std::runtime_error>
-      Exception Build() {
-        return Exception(std::basic_ostringstream<char>::str());
-      }
-
-      std::string GetMessage() {
-        std::string msg = std::basic_ostringstream<char>::str();
-        return msg;
-      };
-
+      std::string GetMessage() override;
   };
-
-  class wexceptionstream : public basic_exceptionstream<wchar_t> {
-    public:
-      wexceptionstream() : basic_exceptionstream<wchar_t>() {}
-
-      std::string GetMessage() {
-        std::wstring wmsg = std::basic_ostringstream<wchar_t>::str();
-        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-        std::string msg = converter.to_bytes(wmsg); 
-        return msg;
-      };
-  };
-
 } // util
 } // mdl
 

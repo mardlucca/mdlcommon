@@ -107,6 +107,10 @@
     "unordered_set": "cpp",
     "variant": "cpp",
     "__functional_03": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "__verbose_abort": "cpp",
+    "thread": "cpp"
   }
 }
