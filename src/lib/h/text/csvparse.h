@@ -38,7 +38,7 @@ namespace text {
   class ICsvParseListener {
     public:
       virtual void OnNewLine() = 0;
-      virtual void OnValue(const std::wstring& val) = 0;
+      virtual void OnValue(const std::string& val) = 0;
       virtual void OnTerminate();
   };
   
@@ -47,7 +47,7 @@ namespace text {
       StdOutCsvParseListener(
         char quoteChar = '"', char delimiterChar = ',');
       void OnNewLine() override;
-      void OnValue(const std::wstring& val) override;
+      void OnValue(const std::string& val) override;
 
       static ICsvParseListener& GetInstance();
     private:
@@ -58,7 +58,7 @@ namespace text {
       static StdOutCsvParseListener _instance;
   };
 
-  void CsvParse(std::wistream& in, ICsvParseListener& listener,
+  void CsvParse(std::istream& in, ICsvParseListener& listener,
       char quoteChar = '"', char separatorChr = ',');
   void CsvParse(const char* fileName, ICsvParseListener& listener,
       char quoteChar = '"', char separatorChr = ',');

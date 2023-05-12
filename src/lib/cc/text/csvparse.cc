@@ -48,15 +48,15 @@ namespace text {
 
   void StdOutCsvParseListener::OnNewLine() {
     count = 0;
-    std::wcout << std::endl;
+    std::cout << std::endl;
   };
 
-  void StdOutCsvParseListener::OnValue(const std::wstring& val) {
+  void StdOutCsvParseListener::OnValue(const std::string& val) {
     if (count > 0) {
-      std::wcout << delimiterChar;
+      std::cout << delimiterChar;
     }
 
-    std::wcout << quoteChar << val << quoteChar;
+    std::cout << quoteChar << val << quoteChar;
     count++;
   };
 
@@ -74,7 +74,7 @@ namespace text {
 
   CsvParseState CsvParseHandleInitial(
       char ch, 
-      std::wstring& value,
+      std::string& value,
       char quoteChar, 
       char separatorChr,
       ICsvParseListener& listener) {
@@ -99,7 +99,7 @@ namespace text {
 
   CsvParseState CsvParseHandleReading(
       char ch, 
-      std::wstring& value,
+      std::string& value,
       char quoteChar, 
       char separatorChr,
       ICsvParseListener& listener) {
@@ -132,7 +132,7 @@ namespace text {
 
   CsvParseState CsvParseHandleUnquotedReading(
       char ch, 
-      std::wstring& value,
+      std::string& value,
       char quoteChar, 
       char separatorChr,
       ICsvParseListener& listener) {
@@ -162,7 +162,7 @@ namespace text {
 
   CsvParseState CsvParseHandleQuotedReading(
       char ch, 
-      std::wstring& value,
+      std::string& value,
       char quoteChar, 
       char separatorChr,
       ICsvParseListener& listener) {
@@ -182,7 +182,7 @@ namespace text {
 
   CsvParseState CsvParseHandleQuotedFoundQuote(
       char ch, 
-      std::wstring& value,
+      std::string& value,
       char quoteChar, 
       char separatorChr,
       ICsvParseListener& listener) {
@@ -220,12 +220,12 @@ namespace text {
    * RFC 4180
    */
   void CsvParse(
-      std::wistream& in, 
+      std::istream& in, 
       ICsvParseListener& listener,
       char quoteChar, 
       char separatorChr) {
     CsvParseState state = CsvParseState::initial;
-    std::wstring value;
+    std::string value;
 
     while (!in.eof()) {
       char ch = in.get();
@@ -256,7 +256,7 @@ namespace text {
       ICsvParseListener& listener,
       char quoteChar, 
       char separatorChr) {
-    std::wifstream in(fileName);
+    std::ifstream in(fileName);
 
     if (!in) {
       throw mdl::util::exceptionstream()

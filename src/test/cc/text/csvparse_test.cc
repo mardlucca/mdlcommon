@@ -50,7 +50,7 @@ namespace text {
         expectedIndex++;
       }
 
-      void OnValue(const std::wstring& val) override {
+      void OnValue(const std::string& val) override {
         ASSERT_FALSE(finished);
         ASSERT_EQ(EventType::value, expectedEvent[expectedIndex]);
         ASSERT_EQ(expectedValue[expectedIndex], val);
@@ -64,7 +64,7 @@ namespace text {
         finished = true;
       }
 
-      void Expect(const wchar_t* value) {
+      void Expect(const char* value) {
         expectedEvent.push_back(EventType::value);
         expectedValue.push_back(value);
       }
@@ -84,198 +84,198 @@ namespace text {
       }
     private:
       std::vector<EventType> expectedEvent;
-      std::vector<const wchar_t*> expectedValue;
+      std::vector<const char*> expectedValue;
       int expectedIndex = 0;
       bool finished = false;
   };
 
   TEST(CsvParseTestSuite, SingleValueTest_Unquoted) {
     TestListener listener;
-    listener.Expect(L"te st");
+    listener.Expect("te st");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"te st");
+    std::istringstream in;
+    in.str("te st");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, SingleValueTest_Quoted) {
     TestListener listener;
-    listener.Expect(L"te,st");
+    listener.Expect("te,st");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\"te,st\"");
+    std::istringstream in;
+    in.str("\"te,st\"");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, DoubleValueTest_Unquoted) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"test2");
+    listener.Expect("test");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"test,test2");
+    std::istringstream in;
+    in.str("test,test2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, DoubleValueTest_Quoted) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"test2");
+    listener.Expect("test");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\"test\",\"test2\"");
+    std::istringstream in;
+    in.str("\"test\",\"test2\"");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, DoubleValueTest_Mixed1) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"test2");
+    listener.Expect("test");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\"test\",test2");
+    std::istringstream in;
+    in.str("\"test\",test2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, DoubleValueTest_Mixed2) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"test2");
+    listener.Expect("test");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"test,\"test2\"");
+    std::istringstream in;
+    in.str("test,\"test2\"");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, EmptyValueTest_Initial) {
     TestListener listener;
-    listener.Expect(L"");
-    listener.Expect(L"");
-    listener.Expect(L"test");
+    listener.Expect("");
+    listener.Expect("");
+    listener.Expect("test");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L",,test");
+    std::istringstream in;
+    in.str(",,test");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, EmptyValueTest_Middle) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"");
-    listener.Expect(L"");
-    listener.Expect(L"test2");
+    listener.Expect("test");
+    listener.Expect("");
+    listener.Expect("");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"test,,,test2");
+    std::istringstream in;
+    in.str("test,,,test2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, EmptyValueTest_End) {
     TestListener listener;
-    listener.Expect(L"test");
-    listener.Expect(L"");
-    listener.Expect(L"");
+    listener.Expect("test");
+    listener.Expect("");
+    listener.Expect("");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"test,,");
+    std::istringstream in;
+    in.str("test,,");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, NewLineTest_AfterUnquoted) {
     TestListener listener;
-    listener.Expect(L"test");
+    listener.Expect("test");
     listener.ExpectNewLine();
-    listener.Expect(L"test2");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\ntest\n\ntest2");
+    std::istringstream in;
+    in.str("\ntest\n\ntest2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
   
   TEST(CsvParseTestSuite, NewLineTest_AfterQuoted) {
     TestListener listener;
-    listener.Expect(L"test");
+    listener.Expect("test");
     listener.ExpectNewLine();
-    listener.Expect(L"test2");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\n\"test\"\n\ntest2");
+    std::istringstream in;
+    in.str("\n\"test\"\n\ntest2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, NewLineTest_AfterEmpty) {
     TestListener listener;
-    listener.Expect(L"");
-    listener.Expect(L"");
+    listener.Expect("");
+    listener.Expect("");
     listener.ExpectNewLine();
-    listener.Expect(L"test2");
+    listener.Expect("test2");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\n,\n\ntest2");
+    std::istringstream in;
+    in.str("\n,\n\ntest2");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, MultilineValueTest) {
     TestListener listener;
-    listener.Expect(L"a\nb");
-    listener.Expect(L"c");
+    listener.Expect("a\nb");
+    listener.Expect("c");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\"a\nb\",c");
+    std::istringstream in;
+    in.str("\"a\nb\",c");
     CsvParse(in, listener);
     listener.ExpectFinished();
   }
 
   TEST(CsvParseTestSuite, UnterminatedQuotedValueTest) {
     TestListener listener;
-    listener.Expect(L"a\nb");
-    listener.Expect(L"c");
+    listener.Expect("a\nb");
+    listener.Expect("c");
     listener.ExpectTerminate();
 
-    std::wistringstream in;
-    in.str(L"\"a\nb,c");
+    std::istringstream in;
+    in.str("\"a\nb,c");
     ASSERT_THROW(CsvParse(in, listener), mdl::text::parse_exception);
   }
 
   TEST(CsvParseTestSuite, UnterminatedQuotedValueTest_BeforeEOF) {
     TestListener listener;
-    listener.Expect(L"");
+    listener.Expect("");
 
-    std::wistringstream in;
-    in.str(L",\"abc");
+    std::istringstream in;
+    in.str(",\"abc");
     ASSERT_THROW(CsvParse(in, listener), mdl::text::parse_exception);
   }
 
   TEST(CsvParseTestSuite, InvalidCharAfterFinalQuoteTest) {
     TestListener listener;
 
-    std::wistringstream in;
-    in.str(L"\"abc\"x,");
+    std::istringstream in;
+    in.str("\"abc\"x,");
     ASSERT_THROW(CsvParse(in, listener), mdl::text::parse_exception);
   }  
 
