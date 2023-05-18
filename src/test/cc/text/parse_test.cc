@@ -29,6 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 
 #include "mdl/io.h"
@@ -37,16 +38,24 @@
 namespace mdl {
 namespace text {
 
-  TEST(NumParseTestSuite, TestParseDouble) {
+  TEST(ParseTestSuite, TestParseDouble) {
     ASSERT_EQ(1.2345, mdl::text::ParseDouble("1.2345"));
     ASSERT_EQ(1.23, mdl::text::ParseDouble("1.23"));
   }
 
-  TEST(NumParseTestSuite, TestParseDouble_Invalid) {
+  TEST(ParseTestSuite, TestParseDouble_Invalid) {
     ASSERT_THROW(mdl::text::ParseDouble("az1"), mdl::text::parse_exception);
   }
 
-  TEST(NumParseTestSuite, TestParseInt) {
+  TEST(ParseTestSuite, TestParseDoubles) {
+    ASSERT_EQ(std::vector<double>({1.2, 1.3}), mdl::text::ParseDoubles("1.2,1.3"));
+    ASSERT_EQ(std::vector<double>({1.2, 1.3}), mdl::text::ParseDoubles(" 1.2,1.3"));
+    ASSERT_EQ(std::vector<double>({1.2, 1.3}), mdl::text::ParseDoubles("1.2, 1.3 "));
+    ASSERT_NE(std::vector<double>({1.3, 1.2}), mdl::text::ParseDoubles("1.2,1.3"));
+    ASSERT_NE(std::vector<double>({1.2}), mdl::text::ParseDoubles("1.2,1.3"));
+  }
+
+  TEST(ParseTestSuite, TestParseInt) {
     ASSERT_EQ(12, mdl::text::ParseInt("12"));
     ASSERT_EQ(13, mdl::text::ParseInt(" 13"));
     ASSERT_EQ(14, mdl::text::ParseInt("14 "));
@@ -54,8 +63,16 @@ namespace text {
     ASSERT_EQ(15, mdl::text::ParseInt(" 15 "));
   }
 
-  TEST(NumParseTestSuite, TestParseInt_Invalid) {
+  TEST(ParseTestSuite, TestParseInt_Invalid) {
     ASSERT_THROW(mdl::text::ParseInt("z12"), mdl::text::parse_exception);
+  }
+
+  TEST(ParseTestSuite, TestParseInts) {
+    ASSERT_EQ(std::vector<int>({2, 3}), mdl::text::ParseInts("2,3"));
+    ASSERT_EQ(std::vector<int>({2, 3}), mdl::text::ParseInts(" 2,3"));
+    ASSERT_EQ(std::vector<int>({2, 3}), mdl::text::ParseInts("2, 3 "));
+    ASSERT_NE(std::vector<int>({3, 2}), mdl::text::ParseInts("2,3"));
+    ASSERT_NE(std::vector<int>({2}), mdl::text::ParseInts("2,3"));
   }
 
 } // namespace text

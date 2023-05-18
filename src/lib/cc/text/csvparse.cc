@@ -38,6 +38,7 @@
 
 namespace mdl {
 namespace text {
+  using mdl::util::raise;
 
   void ICsvParseListener::OnTerminate() {}
 
@@ -259,9 +260,10 @@ namespace text {
     std::ifstream in(fileName);
 
     if (!in) {
-      throw mdl::util::exceptionstream()
-        .Append("Could not open file: ").Append(fileName)
-        .Build<mdl::io::file_not_found_exception>();
+      mdl::util::exceptionstream() 
+          << "Could not open file: " 
+          << fileName 
+          << raise<mdl::io::file_not_found_exception>();
     }
 
     try {

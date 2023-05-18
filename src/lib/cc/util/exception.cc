@@ -38,9 +38,13 @@ namespace util {
   not_found_exception::not_found_exception(const std::string& message)
       : std::runtime_error(message) {}
 
-  std::string exceptionstream::GetMessage()     {
+  std::string exceptionstream::GetMessage() {
     std::string msg = std::basic_ostringstream<char>::str();
     return msg;
+  };
+
+  void exceptionstream::Reset() {
+    this->str("");
   };
 } // util
 } // mdl

@@ -39,10 +39,14 @@ namespace functional {
   bool IsEven(int val);
   bool IsOdd(int val);
   int Negate(int val);
+  void NoopTask();
+
+  template <class... Args>
+  void Noop(Args... args) {}
 
   /**
    * Converts from funtion pointer to std::function. At times the compiler has trouble deducing
-   * types parameters when converting from function pointer types to std::function. This servers
+   * type parameters when converting from function pointer types to std::function. This servers
    * as a hint to help.
   */
   template <class T, class F>
@@ -56,7 +60,7 @@ namespace functional {
   }
 
   template <class T>
-  std::function<void ()> Set(T* ptr, const T& val) {
+  std::function<void ()> Assign(T* ptr, const T& val) {
     return [ptr, val]() {
       *ptr = val;
     };
@@ -76,6 +80,12 @@ namespace functional {
     };
   }
 
+  template <class T, class F>
+  std::function<void (const F&)> Assign(T* out, T (*castFn)(const F&)) {
+    return [out, castFn](const F& val) {
+      *out = castFn(val);
+    };
+  }
 
   template <class T>
   class SupplierIterator 

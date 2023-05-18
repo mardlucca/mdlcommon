@@ -43,7 +43,7 @@ namespace functional {
 
   TEST(FunctionalTestSuite, TestSetting) {
     int x = 10;
-    auto settingFn = Set(&x, 20);
+    auto settingFn = Assign(&x, 20);
     settingFn();
     ASSERT_EQ(20, x);
   }

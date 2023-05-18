@@ -26,34 +26,43 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "../../h/text/numparse.h"
+#include "../../h/text/parse.h"
 
 #include "../../h/text/exception.h"
 #include "../../h/util/exception.h"
+#include "../../h/util/string.h"
 
 #include <string>
 
 namespace mdl {
 namespace text {
 
-  double ParseDouble(const std::string_view& val) {
+  int parse<int>::operator()(const std::string_view& val) {
     try {
-      // TODO: reimplement without allocating std::string
-      return std::stod(std::string(val));
+      return std::stoi(util::string::Trim(val.data()));
     } catch (const std::invalid_argument& e) {
       throw mdl::util::exceptionstream()
-          .Append("Cannot covert '").Append(val).Append("' to a double.")
+          .Append("Cannot covert '").Append(val).Append("' to an int.")
           .Build<mdl::text::parse_exception>();
     }
   }
 
-  int ParseInt(const std::string_view& val) {
+  float parse<float>::operator()(const std::string_view& val) {
     try {
-      // TODO: reimplement without allocating std::string
-      return std::stoi(std::string(val));
+      return std::stof(util::string::Trim(val.data()));
     } catch (const std::invalid_argument& e) {
       throw mdl::util::exceptionstream()
-          .Append("Cannot covert '").Append(val).Append("' to an int.")
+          .Append("Cannot covert '").Append(val).Append("' to a float.")
+          .Build<mdl::text::parse_exception>();
+    }
+  }
+
+  double parse<double>::operator()(const std::string_view& val) {
+    try {
+      return std::stod(util::string::Trim(val.data()));
+    } catch (const std::invalid_argument& e) {
+      throw mdl::util::exceptionstream()
+          .Append("Cannot covert '").Append(val).Append("' to a double.")
           .Build<mdl::text::parse_exception>();
     }
   }

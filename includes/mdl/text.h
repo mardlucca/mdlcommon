@@ -31,6 +31,6 @@
 
 #include "src/lib/h/text/csvparse.h"
 #include "src/lib/h/text/exception.h"
-#include "src/lib/h/text/numparse.h"
+#include "src/lib/h/text/parse.h"
 
 #endif // _MDL_TEXT

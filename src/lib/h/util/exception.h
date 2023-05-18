@@ -56,17 +56,34 @@ namespace util {
 
       template<class Exception = std::runtime_error>
       Exception Build() {
-        return Exception(GetMessage());
+        auto msg = GetMessage();
+        Reset();
+        this->clear();
+        return Exception(msg);
       }
 
       virtual std::string GetMessage() = 0;
+      virtual void Reset() = 0;
   };
+
+
+  template<class Exception = std::runtime_error>
+  class raise {
+    public:
+      typedef Exception type;
+  };
+
+  template<class CharT, class Traits = std::char_traits<CharT>, class Allocator = std::allocator<CharT>, class E>
+  E operator<<(basic_exceptionstream<CharT, Traits, Allocator>& stream, const raise<E>& r) {
+    throw stream.template Build<typename raise<E>::type>();
+  }
 
   class exceptionstream : public basic_exceptionstream<char> {
     public:
       exceptionstream() : basic_exceptionstream<char>() {}
 
       std::string GetMessage() override;
+      void Reset() override;
   };
 } // util
 } // mdl

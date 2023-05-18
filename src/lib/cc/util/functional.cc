@@ -35,6 +35,7 @@ namespace functional {
   int Negate(int val) { return -val; }
   bool IsEven(int val) { return (val & 1) == 0; }
   bool IsOdd(int val) { return val & 1; }
+  void NoopTask() {}
 
 } // functional
 } // util
